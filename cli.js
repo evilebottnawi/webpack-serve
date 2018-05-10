@@ -12,7 +12,6 @@ const cosmiconfig = require('cosmiconfig');
 const debug = require('debug')('webpack-serve');
 const meow = require('meow');
 const merge = require('lodash/merge');
-// const resolveModule = require('resolve').sync;
 const importLocal = require('import-local'); // eslint-disable-line import/order
 
 // Prefer the local installation of webpack-serve
