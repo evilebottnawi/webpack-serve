@@ -259,21 +259,21 @@ describe('webpack-serve Options', () => {
         done();
       });
     });
-  }
+  } else {
+    // https://nodejs.org/api/http2.html#http2_client_side_example
+    t('should accept a http2 option', (done) => {
+      const config = load('./fixtures/basic/webpack.config.js');
+      config.serve.http2 = true;
 
-  // https://nodejs.org/api/http2.html#http2_client_side_example
-  t('should accept a http2 option', (done) => {
-    const config = load('./fixtures/basic/webpack.config.js');
-    config.serve.http2 = true;
-
-    serve({ config }).then((server) => {
-      server.on('listening', () => {
-        // options.hot should be mutated from the default setting as an object
-        assert(server.options.http2);
-        setTimeout(() => server.close(done), 1000);
+      serve({ config }).then((server) => {
+        server.on('listening', () => {
+          // options.hot should be mutated from the default setting as an object
+          assert(server.options.http2);
+          setTimeout(() => server.close(done), 1000);
+        });
       });
     });
-  });
+  }
 
   t('should accept a https option');
 
