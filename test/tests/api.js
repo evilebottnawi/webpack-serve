@@ -3,6 +3,7 @@ const path = require('path');
 const assert = require('power-assert');
 const clip = require('clipboardy');
 
+const WebpackServeError = require('../../lib/WebpackServeError');
 const { load, serve, t } = require('../util');
 
 const logLevel = 'silent';
@@ -22,6 +23,14 @@ describe('webpack-serve API', () => {
       assert(typeof server.on === 'function');
 
       setTimeout(() => server.close(done), 1000);
+    });
+  });
+
+  t('should throw', (done) => {
+    const config = { bad: 'batman' };
+    serve({ config }).catch((error) => {
+      assert(error instanceof WebpackServeError);
+      done();
     });
   });
 
