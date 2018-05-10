@@ -51,7 +51,9 @@ describe('webpack-serve Events', () => {
     serve({ config }).then((server) => {
       server.on('build-started', () => {
         assert(true);
-        setTimeout(() => { server.close(done); }, timeout);
+        setTimeout(() => {
+          server.close(done);
+        }, timeout);
       });
     });
   }).timeout(5e3);
@@ -61,7 +63,9 @@ describe('webpack-serve Events', () => {
     serve({ config }).then((server) => {
       server.on('build-finished', () => {
         assert(true);
-        setTimeout(() => { server.close(done); }, timeout);
+        setTimeout(() => {
+          server.close(done);
+        }, timeout);
       });
     });
   }).timeout(5e3);
