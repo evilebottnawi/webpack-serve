@@ -69,11 +69,6 @@ const cli = meow(
 );
 
 const flags = Object.assign({}, cli.flags);
-
-if (flags.help) {
-  cli.showHelp(0);
-}
-
 const explorer = cosmiconfig('serve', {});
 const { config } = explorer.searchSync() || {};
 const options = merge({ flags }, config);
