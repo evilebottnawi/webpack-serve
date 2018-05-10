@@ -49,7 +49,8 @@ describe('webpack-serve Logging', () => {
     const config = load('./fixtures/basic/webpack.config.js', false);
 
     serve({ config }).then((server) => {
-      server.compiler.plugin('done', () => {
+      server.compiler.hooks.done.tap('WebpackServeTest', () => {
+        // server.compiler.plugin('done', () => {
         assert(log.info.callCount > 0);
         restore(sandbox);
         server.close(done);

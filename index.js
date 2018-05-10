@@ -51,11 +51,7 @@ module.exports = (opts) => {
         }
       };
 
-      if (options.compiler.hooks) {
-        options.compiler.hooks.done.tap('WebpackServe', done);
-      } else {
-        options.compiler.plugin('done', done);
-      }
+      options.compiler.hooks.done.tap('WebpackServe', done);
 
       const { close, server, start } = getServer(options);
 
