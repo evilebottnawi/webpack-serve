@@ -7,6 +7,7 @@ const mock = require('mock-require');
 const webpack = require('webpack'); // eslint-disable-line import/order
 const WebSocket = require('ws');
 
+const { parse } = require('../../lib/options');
 const util = require('../util');
 
 const nodeVersion = parseInt(process.version.substring(1), 10);
@@ -23,6 +24,15 @@ describe('webpack-serve Options', () => {
   beforeEach(pause);
   afterEach(() => {
     hook = null;
+  });
+
+  t('should parse json', () => {
+    assert(parse('{}'));
+  });
+
+  t('should handle failed parse', () => {
+    assert(parse('asd') === 'asd');
+    assert(parse([]) == null);
   });
 
   t('should accept an add option', (done) => {
@@ -125,6 +135,18 @@ describe('webpack-serve Options', () => {
     });
   });
 
+  t('should reject non-object dev', (done) => {
+    const config = load('./fixtures/basic/webpack.config.js');
+    const flags = {
+      dev: 'true',
+    };
+
+    serve({ config, flags }).catch((err) => {
+      assert(err);
+      done();
+    });
+  });
+
   t('should accept a host option', (done) => {
     const config = load('./fixtures/basic/webpack.config.js');
     config.serve.host = '0.0.0.0';
@@ -150,6 +172,18 @@ describe('webpack-serve Options', () => {
         assert.deepEqual(options.hot.hot, false);
         close(done);
       });
+    });
+  });
+
+  t('should reject non-object hot', (done) => {
+    const config = load('./fixtures/basic/webpack.config.js');
+    const flags = {
+      hot: 'true',
+    };
+
+    serve({ config, flags }).catch((err) => {
+      assert(err);
+      done();
     });
   });
 
@@ -227,9 +261,20 @@ describe('webpack-serve Options', () => {
     });
   }
 
-  // need to get devcert documentation going and then write tests
-  // for the http2 test: https://nodejs.org/api/http2.html#http2_client_side_example
-  t('should accept a http2 option');
+  // https://nodejs.org/api/http2.html#http2_client_side_example
+  t('should accept a http2 option', (done) => {
+    const config = load('./fixtures/basic/webpack.config.js');
+    config.serve.http2 = true;
+
+    serve({ config }).then((server) => {
+      server.on('listening', () => {
+        // options.hot should be mutated from the default setting as an object
+        assert(server.options.http2);
+        setTimeout(() => server.close(done), 1000);
+      });
+    });
+  });
+
   t('should accept a https option');
 
   // logLevel and logTime option tests can be found in ./log.js

@@ -6,7 +6,7 @@ const clip = require('clipboardy');
 const WebpackServeError = require('../../lib/WebpackServeError');
 const { load, serve, t } = require('../util');
 
-const logLevel = 'silent';
+const logLevel = 'info';
 
 describe('webpack-serve API', () => {
   it('should exist', () => assert(serve));
