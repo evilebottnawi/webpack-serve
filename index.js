@@ -31,15 +31,6 @@ module.exports = (opts) => {
         }
       }
 
-      // if no context was specified in a config, and no --content options was
-      // used, then we need to derive the context, and content location, from
-      // the compiler.
-      if (!options.content || !options.content.length) {
-        options.content = [].concat(
-          options.compiler.options.context || process.cwd()
-        );
-      }
-
       const done = (stats) => {
         const json = stats.toJson();
         if (stats.hasErrors()) {
