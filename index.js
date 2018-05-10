@@ -40,7 +40,16 @@ module.exports = (opts) => {
         if (stats.hasWarnings()) {
           bus.emit('compiler-warning', json);
         }
+
+        bus.emit('build-finished', stats);
       };
+
+      const compilers = options.compiler.compilers || [options.compiler];
+      for (const comp of compilers) {
+        comp.hooks.compile.tap('WebpackServe', () => {
+          bus.emit('build-started', comp);
+        });
+      }
 
       options.compiler.hooks.done.tap('WebpackServe', done);
 
